@@ -1,16 +1,9 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
 const mongoose = require('mongoose');
-const { classroomSocket } = require('./socket/classroomSocket');
-const classroomRoutes = require('./routes/classroomRoutes');
 const connectDB = require('./config/db');
+const appointment = require("./routes/appointment")
 
-// Setup Express and HTTP server
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
 // Database connection
 connectDB();
 
@@ -18,16 +11,9 @@ connectDB();
 app.use(express.json());
 
 // Routes
-app.use('/api/classroom', classroomRoutes);
-
-// Socket IO
-classroomSocket(io);
-
-// Serve frontend (for testing)
-app.use(express.static('public'));
-
+app.use('/api',appointment);
 // Start server
-const PORT = 7000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const PORT = 7001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
